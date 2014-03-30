@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VoigtKampff</string>
+    <string name="step1Info">Select the speed of text appearing on the screen that is most comfortable for you.</string>
+</resources>
