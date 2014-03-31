@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -19,16 +21,18 @@ public class TestActivity extends Activity {
     private int questionNumber = 0;
     private int questionIndex = 0;
     private int textSpeed;
+    private long reactionTime;
 
     private char[] question;
     private String[] answers = new String[4];
+    private int[] answerScores = new int[4];
 
     private RadioGroup answerGroup;
     private TextView animatedText;
     private TextView title;
 
     private Intent resultsIntent;
-    private int[] scores = new int[8];
+    private int[] finalResults = new int[8];
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +42,7 @@ public class TestActivity extends Activity {
         animatedText = (TextView) findViewById(R.id.testQuestion);
         title = ((TextView) findViewById(R.id.testNumber));
 
-        resultsIntent = new Intent(this, MainActivity.class);
+        resultsIntent = new Intent(this, ResultsActivity.class);
 
         try {
             resetView();
@@ -48,11 +52,25 @@ public class TestActivity extends Activity {
     }
 
     public void nextQuestion(View view) {
+        reactionTime = (System.nanoTime() - reactionTime) / 1000000000;
+        int currScore = answerScores[answerGroup.indexOfChild(findViewById(answerGroup.getCheckedRadioButtonId()))];
+
+        if(reactionTime < 3) {
+            currScore += 10;
+        } else if(reactionTime < 6) {
+            currScore += 5;
+        } else if(reactionTime < 9) {
+            currScore -= 5;
+        } else {
+            currScore -= 20;
+        }
+
+        finalResults[questionNumber - 1] = currScore;
 
         try {
             resetView();
         } catch (IOException e) {
-            e.printStackTrace();
+            finishTest();
         }
     }
 
@@ -63,13 +81,18 @@ public class TestActivity extends Activity {
 
         input = new BufferedReader(new InputStreamReader(assetManager.open(String.format("answers/%d.txt", questionNumber))));
         for(int i = 0; i < 4; i++) {
-            answers[i] = input.readLine();
+            String[] line = input.readLine().split("XXX");
+            answers[i] = line[0];
+            answerScores[i] = Integer.parseInt(line[1]);
+
             ((RadioButton) answerGroup.getChildAt(i)).setText(answers[i]);
         }
 
         title.setText("Question #" + String.valueOf(questionNumber));
         animatedText.setText("");
         answerGroup.setVisibility(RadioGroup.INVISIBLE);
+        ((Button) findViewById(R.id.testNext)).setVisibility(Button.INVISIBLE);
+        answerGroup.clearCheck();
         animateText();
     }
 
@@ -90,9 +113,18 @@ public class TestActivity extends Activity {
                 } else {
                     for(int i = 0; i < 4; i++) {
                         answerGroup.setVisibility(RadioGroup.VISIBLE);
+                        ((Button) findViewById(R.id.testNext)).setVisibility(Button.VISIBLE);
                     }
+
+                    reactionTime = System.nanoTime();
                 }
             }
         }, textSpeed);
+    }
+
+    private void finishTest() {
+        resultsIntent.putExtra("finalResults", finalResults);
+        finish();
+        startActivity(resultsIntent);
     }
 }

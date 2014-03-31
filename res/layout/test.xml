@@ -65,6 +65,7 @@
         android:id="@+id/testNext"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:onClick="nextQuestion"/>
+        android:onClick="nextQuestion"
+        android:visibility="invisible"/>
 
 </LinearLayout>

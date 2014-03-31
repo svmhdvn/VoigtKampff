@@ -11,25 +11,36 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Voigt-Kampff Test"
         android:id="@+id/textView"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="100dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calibrate"
+        android:text="Calibrate Reading Speed"
         android:id="@+id/buttonCalibrate"
-        android:layout_margin="20dp"
         android:layout_gravity="center_horizontal"
-        android:onClick="calibrateView"/>
+        android:onClick="calibrateView"
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="Start Test"
         android:id="@+id/buttonStart"
-        android:layout_margin="20dp"
         android:layout_gravity="center_horizontal"
-        android:onClick="testView"/>
+        android:onClick="testView"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Help/Instructions"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:onClick="helpView"/>
 
 </LinearLayout>
 

@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
     }
 
     public void calibrateView(View view){
+        finish();
         startActivity(new Intent(this, CalibrationActivity.class));
     }
 
@@ -38,6 +39,11 @@ public class MainActivity extends Activity {
                     })
                     .show();
         }
+    }
+
+    public void helpView(View view) {
+        finish();
+        startActivity(new Intent(this, HelpView.class));
     }
 
 }
